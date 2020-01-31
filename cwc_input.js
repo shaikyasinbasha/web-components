@@ -4,7 +4,7 @@ class CWCInput extends HTMLElement {
     const  shadow = this.attachShadow({mode: 'open'});
     shadow.innerHTML = `
       <style>
-        *, ::after, ::before {
+        :host *, ::after, ::before {
           box-sizing: border-box;
         }
         :host {
