@@ -1,0 +1,19 @@
+{
+  "name": "web-components",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node createbuild.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shaikyasinbasha/web-components.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shaikyasinbasha/web-components/issues"
+  },
+  "homepage": "https://github.com/shaikyasinbasha/web-components#readme"
+}
