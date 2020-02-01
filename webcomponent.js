@@ -8,10 +8,8 @@ class CWCInput extends HTMLElement {
       <style>
         :host *, ::after, ::before {
           box-sizing: border-box;
-        }
-        :host {
-          font-family: 'Open Sans', sans-serif;
-        }   
+          font-family: 'Zhi Mang Xing', cursive;
+        }  
         :host input {
           display: block;
           width: 100%;
@@ -26,10 +24,10 @@ class CWCInput extends HTMLElement {
           border: 1px solid #ced4da;
           border-radius: .25rem;
           transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-      }     
+        }     
       </style>
       <style>
-          @import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap")
+        @import url('https://fonts.googleapis.com/css?family=Zhi+Mang+Xing&display=swap');
       </style>
       <div></div>
     `;
@@ -62,6 +60,9 @@ class CWCSelect extends HTMLElement {
   constructor() {
     super();
     this.documentClick = this.documentClick.bind(this);
+    this.getSelectValue = this.getSelectValue.bind(this);
+    this.toggelMenuList = this.toggelMenuList.bind(this);
+
     const  shadow = this.attachShadow({mode: 'open'});
     shadow.innerHTML = `
       <style>
@@ -69,11 +70,12 @@ class CWCSelect extends HTMLElement {
       </style>
       <style>
         :host *, ::after, ::before {
-          box-sizing: border-box;
-        }
-        :host {
+          box-sizing: border-box;          
           font-family: 'Open Sans', sans-serif;
-        }   
+        }
+        :host{
+          font-size: 12px;
+        }
         :host input {
           display: block;
           width: 100%;
@@ -102,33 +104,71 @@ class CWCSelect extends HTMLElement {
           border-left: 1px solid #CCC;
           border-right: 1px solid #CCC;
           position: absolute;
-          width: 97.5%;
-          background: #f7f7f7;
+          left: 8px;
+          right: 8px;
+          background: #fdfdfd;
         }  
         :host .menu-list div{
           border-bottom: 1px solid #CCC;
           padding: 5px;
         }
-        :host .menu-list div:hover{
-          background-color: red;
+        :host .menu-list div:not(.menu-button):hover{
+          background-color: #f7f7f7;
         }
         :host .menu-list.show{
           display: block;
         }
+        :host .hide{
+          display: none !important;
+        }
+        :host .menu-button{
+          display: flex;
+          justify-content: space-between;
+        }
+        :host .btn {
+          display: inline-block;
+          font-weight: 400;
+          text-align: center;
+          white-space: nowrap;
+          vertical-align: middle;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          border: 1px solid transparent;
+          padding: .375rem .75rem;
+          line-height: 1.5;
+          border-radius: .25rem;
+          transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+        :host .btn-primary {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        :host .btn-second {
+          color: #000;
+          background-color: #FFF;
+          border-color: #ccc;
+      }
       </style>
       <div class="menu-container">
         <div>
           <input type="text" readonly value="" />            
         </div>
         <div class="menu-list" >
-          <div >ONE</div>
-          <div >TWO</div>
-          <div >THREE</div>
+          <span class="menu-each-item">
+          </span>
+          <div class="menu-button hide">
+            <button class="btn btn-second">Cancel</button>
+            <button class="btn btn-primary">Apply</button>
+          </div>        
         </div>
       </div>
     `;
-    shadow.querySelector('input').addEventListener('click', () => {
-      this.toggelMenuList(this)
+    shadow.querySelector('input').addEventListener('click', this.toggelMenuList);
+    shadow.querySelector('button').addEventListener('click', () => {
+      console.log("button")
     });
   }
 
@@ -141,42 +181,62 @@ class CWCSelect extends HTMLElement {
     }
   }
 
-  toggelMenuList(elem) {
-    const shadow = elem.shadowRoot;
+  toggelMenuList() {
+    const shadow = this.shadowRoot;
     const menulist = shadow.querySelector('.menu-list');
     if(menulist.classList.contains('show')){
-      shadow.querySelectorAll('.menu-list div').forEach((item) => {
-        item.removeEventListener('click', elem.getSelectValue);
-      })
       menulist.classList.remove('show');
     }else{
-      document.addEventListener('click', elem.documentClick);
+      document.addEventListener('click', this.documentClick);
       setTimeout(() => {
         menulist.classList.add('show');
-        shadow.querySelectorAll('.menu-list div').forEach((item) => {
-          item.addEventListener('click', elem.getSelectValue);
-        });
-      },100)
+      },10)
     }
   }
 
   getSelectValue(e) {
     e.stopPropagation();
-    console.log(e.target)
+    const classs = e.target.classList;
+    if (classs.contains('menu-button') || classs.contains('btn')) {
+      return;
+    }
+    const shadow = this.shadowRoot;
+    const inputText = shadow.querySelector('input');
+    inputText.value = e.target.textContent;
+    if(this.getAttribute('multi') === null){      
+      this.toggelMenuList();
+    }
   }
 
-
   _updateRendering() {
+    const shadow = this.shadowRoot;
+    shadow.querySelectorAll('.menu-list div').forEach((item) => {
+      item.addEventListener('click', this.getSelectValue);
+    });
 
+    const menulist = shadow.querySelector('.menu-each-item');
+    const options = JSON.parse(this.getAttribute('options'));
+    //let optionHTML = "";
+    menulist.innerHTML = options.map((x) => ("<div>"+x.label+"</div>"));
+
+    //menulist.innerHTML = optionHTML;
+    shadow.querySelectorAll('.menu-list div').forEach((item) => {
+      item.addEventListener('click', this.getSelectValue);
+    });
+
+    if(this.getAttribute('multi') !== null){
+      shadow.querySelector('.menu-button').classList.remove('hide');
+    }
   }
 
   _applyStyles() {
+
   }
 
-  static get observedAttributes() { return ["name", "value"]; }
+  static get observedAttributes() { return ["name", "options"]; }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    //this._updateRendering();
+    this._updateRendering();
   }
   connectedCallback() {
     //this._updateRendering();
@@ -185,4 +245,5 @@ class CWCSelect extends HTMLElement {
 }
 
 customElements.define("cwc-select", CWCSelect);
+
 // <------------- End cwc_select.js------------>

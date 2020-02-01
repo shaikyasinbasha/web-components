@@ -6,10 +6,8 @@ class CWCInput extends HTMLElement {
       <style>
         :host *, ::after, ::before {
           box-sizing: border-box;
-        }
-        :host {
-          font-family: 'Open Sans', sans-serif;
-        }   
+          font-family: 'Zhi Mang Xing', cursive;
+        }  
         :host input {
           display: block;
           width: 100%;
@@ -24,10 +22,10 @@ class CWCInput extends HTMLElement {
           border: 1px solid #ced4da;
           border-radius: .25rem;
           transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-      }     
+        }     
       </style>
       <style>
-          @import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap")
+        @import url('https://fonts.googleapis.com/css?family=Zhi+Mang+Xing&display=swap');
       </style>
       <div></div>
     `;

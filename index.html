@@ -4,31 +4,36 @@
         <meta charset="UTF-8">
         <title>Web Components</title>
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
         <style>
             body{
               font-family: 'Montserrat', sans-serif;
+            }
+            h1{
+                display: flex;
+                justify-content: space-between;
             }
         </style>
     </head>
     <body>
 
-        <h1><i class="fa fa-plane" aria-hidden="true"></i>WEB COMPONENTS</h1>
-
+        <h1><label>HTML WEB COMPONENTS</label> <i class="fa fa-refresh" aria-hidden="true" onclick="renderNew()"></i></h1>
         <form>
             <cwc-input name="username" value="10"></cwc-input>
+            <BR/>
+            <cwc-select name="username" options='[{"label": "SHAIK", "value":"3"}]' ></cwc-select>
         </form>
+        <!--  -->
 
 
-        <button onclick="renderNew()">Click Me</button>
-
-
-        <!-- <script src="components/cwc_input.js"></script>
-        <script src="components/cwc_select.js"></script> -->
-        <script src="webcomponent.js"></script>
+        <script src="components/cwc_input.js"></script>
+        <script src="components/cwc_select.js"></script>
+        <!-- <script src="webcomponent.js"></script> -->
         <script>
             function renderNew() {
-                const cwcselect = document.createElement('cwc-select');
-                document.querySelector('form').appendChild(cwcselect);
+                const data = [{label: 'YASIN', value:'3'}]
+                const cwcselect = document.querySelector('cwc-select').setAttribute('options', JSON.stringify(data));
+                //document.querySelector('form').appendChild(cwcselect);
             }
         </script>
     </body>
