@@ -29,14 +29,24 @@ class CWCInput extends HTMLElement {
       <style>
         @import url('https://fonts.googleapis.com/css?family=Zhi+Mang+Xing&display=swap');
       </style>
-      <div></div>
+      <div>
+        <input type="text" name="name" value="" />
+      </div>
     `;
+
+    shadow.querySelector('input').addEventListener('keyup', (event) => {
+      shadow.dispatchEvent(new CustomEvent('cwc-keyup', {
+        composed: true,
+        detail: { value: event.target.value }
+      }));
+    });
+
   }
 
   _updateRendering() {
       const shadow = this.shadowRoot;
       const value = this.getAttribute('value');
-      shadow.querySelector('div').innerHTML = `<input type="text" name="name" value="" />`;
+      shadow.querySelector('input').value = value;
   }
 
   static get observedAttributes() { return ["name", "value"]; }
@@ -91,12 +101,7 @@ class CWCSelect extends HTMLElement {
           border-radius: .25rem;
           transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
         }  
-        :host ul li {
-          font-size: 1rem;
-          font-weight: 400;
-        } 
-        :host .menu-container{
-        }
+        
         :host .menu-list{
           display: none;
           line-height: 1.8;
@@ -153,8 +158,8 @@ class CWCSelect extends HTMLElement {
       }
       </style>
       <div class="menu-container">
-        <div>
-          <input type="text" readonly value="" />            
+        <div class="menu-select">
+          <input type="text" readonly value="" placeholder="Select" />            
         </div>
         <div class="menu-list" >
           <span class="menu-each-item">

@@ -34,12 +34,7 @@ class CWCSelect extends HTMLElement {
           border-radius: .25rem;
           transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
         }  
-        :host ul li {
-          font-size: 1rem;
-          font-weight: 400;
-        } 
-        :host .menu-container{
-        }
+        
         :host .menu-list{
           display: none;
           line-height: 1.8;
@@ -96,8 +91,8 @@ class CWCSelect extends HTMLElement {
       }
       </style>
       <div class="menu-container">
-        <div>
-          <input type="text" readonly value="" />            
+        <div class="menu-select">
+          <input type="text" readonly value="" placeholder="Select" />            
         </div>
         <div class="menu-list" >
           <span class="menu-each-item">

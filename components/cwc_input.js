@@ -27,14 +27,24 @@ class CWCInput extends HTMLElement {
       <style>
         @import url('https://fonts.googleapis.com/css?family=Zhi+Mang+Xing&display=swap');
       </style>
-      <div></div>
+      <div>
+        <input type="text" name="name" value="" />
+      </div>
     `;
+
+    shadow.querySelector('input').addEventListener('keyup', (event) => {
+      shadow.dispatchEvent(new CustomEvent('cwc-keyup', {
+        composed: true,
+        detail: { value: event.target.value }
+      }));
+    });
+
   }
 
   _updateRendering() {
       const shadow = this.shadowRoot;
       const value = this.getAttribute('value');
-      shadow.querySelector('div').innerHTML = `<input type="text" name="name" value="" />`;
+      shadow.querySelector('input').value = value;
   }
 
   static get observedAttributes() { return ["name", "value"]; }
