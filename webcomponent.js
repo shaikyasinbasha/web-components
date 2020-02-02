@@ -3,7 +3,7 @@
 class CWCInput extends HTMLElement {
   constructor() {
     super();
-    const  shadow = this.attachShadow({mode: 'open'});
+    const  shadow = this.attachShadow({mode: 'open'}); 
     shadow.innerHTML = `
       <style>
         :host *, ::after, ::before {
@@ -47,9 +47,12 @@ class CWCInput extends HTMLElement {
       const shadow = this.shadowRoot;
       const value = this.getAttribute('value');
       shadow.querySelector('input').value = value;
+         
+      const type = this.getAttribute('type');
+      shadow.querySelector('input').type = type;
   }
 
-  static get observedAttributes() { return ["name", "value"]; }
+  static get observedAttributes() { return ["name", "value", "type"]; }
 
   attributeChangedCallback(name, oldValue, newValue) {
     this._updateRendering();
