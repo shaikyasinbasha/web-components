@@ -5,7 +5,7 @@
         <title>Web Components</title>
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-        <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+        <!--<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>-->
         <style>
             body{
               font-family: 'Montserrat', sans-serif;
@@ -13,18 +13,25 @@
             h1{
                 display: flex;
                 justify-content: space-between;
-            }
+            }   
+            label{
+                font-weight: 700;
+            }        
         </style>
     </head>
     <body>
 
         <h1><label>HTML WEB COMPONENTS</label> <i class="fa fa-refresh" aria-hidden="true" onclick="renderNew()"></i></h1>
+        </br>
         <form>
+            <div><label>INPUT</label></div>
             <cwc-input name="username" value="HELLO WORLD" type="text"></cwc-input>
             <BR/>
-            <cwc-select name="username" options='[{"label": "SHAIK", "value":"3"}]' ></cwc-select>
+            <div><label>SINGLE SELECT</label></div>
+            <cwc-select name="username" options='[{"label": "MALE", "value":"M"},{"label": "FEMALE", "value":"F"}]' ></cwc-select>
             <BR>
-            <cwc-select name="username" options='[{"label": "SHAIK", "value":"3"}]' multi ></cwc-select>
+            <div><label>MULTI SELECT</label></div>
+            <cwc-select name="username" options='[{"label": "React Js", "value":"1"},{"label": "Angular", "value":"2"},{"label": "Vue", "value":"3"}]' multi ></cwc-select>
         </form>
         <!--  -->
 
@@ -34,7 +41,7 @@
         <!-- <script src="webcomponent.js"></script> -->
         <script>
             function renderNew() {
-                const data = [{label: 'YASIN', value:'3'}]
+                const data = [{label: 'SUPER COOL', value:'3'}]
                 const cwcselect = document.querySelector('cwc-select').setAttribute('options', JSON.stringify(data));
                 //document.querySelector('form').appendChild(cwcselect);
             }

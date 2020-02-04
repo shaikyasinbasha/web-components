@@ -154,8 +154,9 @@ class CWCSelect extends HTMLElement {
 
     const menulist = shadow.querySelector('.menu-each-item');
     const options = JSON.parse(this.getAttribute('options'));
+    
     //let optionHTML = "";
-    menulist.innerHTML = options.map((x) => ("<div>"+x.label+"</div>"));
+    menulist.innerHTML = options.map((x) => ("<div>"+x.label+"</div>")).join().replace(/,/g, '');;
 
     //menulist.innerHTML = optionHTML;
     shadow.querySelectorAll('.menu-list div').forEach((item) => {
