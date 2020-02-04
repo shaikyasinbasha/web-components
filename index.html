@@ -50,6 +50,12 @@
             document.querySelector("cwc-input").addEventListener('cwc-keyup', e => {
                 console.log(e.detail.value)
             });
+            document.querySelectorAll("cwc-select")[0].addEventListener('cwc-selectevent', e => {
+                console.log(e.detail.values)
+            });
+            document.querySelectorAll("cwc-select")[1].addEventListener('cwc-selectevent', e => {
+                console.log(e.detail.values)
+            });
         </script>
     </body>
 </html>
