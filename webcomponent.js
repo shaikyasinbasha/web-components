@@ -75,11 +75,14 @@ class CWCSelect extends HTMLElement {
     this.documentClick = this.documentClick.bind(this);
     this.getSelectValue = this.getSelectValue.bind(this);
     this.toggelMenuList = this.toggelMenuList.bind(this);
+    this.dispatchSelectedValues = this.dispatchSelectedValues.bind(this);
 
     const  shadow = this.attachShadow({mode: 'open'});
     shadow.innerHTML = `
       <style>
-          @import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap")
+          @import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
+          @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
+
       </style>
       <style>
         :host *, ::after, ::before {
@@ -115,6 +118,7 @@ class CWCSelect extends HTMLElement {
           left: 8px;
           right: 8px;
           background: #fdfdfd;
+          z-index: 1;
         }  
         :host .menu-list div{
           border-bottom: 1px solid #CCC;
@@ -155,29 +159,62 @@ class CWCSelect extends HTMLElement {
             border-color: #007bff;
         }
         :host .btn-second {
-          color: #000;
-          background-color: #FFF;
-          border-color: #ccc;
-      }
+            color: #000;
+            background-color: #FFF;
+            border-color: #ccc;
+        }
+        :host .selected{
+          color: green;
+        }
+        :host .tick{
+          font-weight: bold;
+        }
+        :host .arrow-down{
+          position: absolute;
+          right: 14px;
+          bottom: 10px;
+          color: #495057;
+        }
+        :host .menu-select{
+          position: relative;
+        }
       </style>
       <div class="menu-container">
         <div class="menu-select">
-          <input type="text" readonly value="" placeholder="Select" />            
+          <input type="text" readonly value="" placeholder="Select" /> 
+          <span class='arrow-down'>&#9660;</span>           
         </div>
         <div class="menu-list" >
           <span class="menu-each-item">
           </span>
           <div class="menu-button hide">
-            <button class="btn btn-second">Cancel</button>
-            <button class="btn btn-primary">Apply</button>
+            <button class="btn btn-second" data="cancel" >Cancel</button>
+            <button class="btn btn-primary" data="apply">Apply</button>
           </div>        
         </div>
       </div>
     `;
     shadow.querySelector('input').addEventListener('click', this.toggelMenuList);
-    shadow.querySelector('button').addEventListener('click', () => {
-      console.log("button")
+    shadow.querySelectorAll('button').forEach((item) => {
+      item.addEventListener('click', this.dispatchSelectedValues);
     });
+    this.multiValues = [];
+  }
+
+  dispatchSelectedValues(elem) {
+    const shadow = this.shadowRoot;
+    if(elem.currentTarget.getAttribute('data') === 'apply') {
+      console.log(this.multiValues);
+      shadow.dispatchEvent(new CustomEvent('cwc-selectevent', {
+        composed: true,
+        detail: { values: this.multiValues }
+      }));
+      const inputText = shadow.querySelector('input');
+      inputText.value = this.multiValues;
+    }else{
+      this.multiValues = [];
+    }
+    this.toggelMenuList();
   }
 
   documentClick() {
@@ -186,6 +223,7 @@ class CWCSelect extends HTMLElement {
     if(menulist.classList.contains('show')){
       menulist.classList.remove('show');
       document.removeEventListener('click', this.documentClick);
+      this.multiValues = [];
     }
   }
 
@@ -210,22 +248,38 @@ class CWCSelect extends HTMLElement {
     }
     const shadow = this.shadowRoot;
     const inputText = shadow.querySelector('input');
-    inputText.value = e.target.textContent;
-    if(this.getAttribute('multi') === null){      
-      this.toggelMenuList();
+    const value = e.target.getAttribute('key-data');
+    //debugger;
+    if(this.getAttribute('multi') === null){  
+      inputText.value = value;    
+      this.toggelMenuList();      
+      shadow.dispatchEvent(new CustomEvent('cwc-selectevent', {
+        composed: true,
+        detail: { values: value }
+      }));
+    }else{
+      e.target.querySelector('.tick').classList.add('selected');
+      this.multiValues.push(value);
     }
   }
 
   _updateRendering() {
-    const shadow = this.shadowRoot;
+    const shadow = this.shadowRoot; 
+    const isMulti = this.getAttribute('multi') === null;
     shadow.querySelectorAll('.menu-list div').forEach((item) => {
       item.addEventListener('click', this.getSelectValue);
     });
 
     const menulist = shadow.querySelector('.menu-each-item');
     const options = JSON.parse(this.getAttribute('options'));
+    
     //let optionHTML = "";
-    menulist.innerHTML = options.map((x) => ("<div>"+x.label+"</div>"));
+    menulist.innerHTML = options.map((x) => (`
+      <div class="menu-each-container" key-data=${x.label}>
+        ${isMulti ? '' : '<span class="tick">&#10003;</span>'}
+        <span>${x.label}</span>
+      </div>
+    `)).join().replace(/,/g, '');;
 
     //menulist.innerHTML = optionHTML;
     shadow.querySelectorAll('.menu-list div').forEach((item) => {

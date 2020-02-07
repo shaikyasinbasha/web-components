@@ -5,7 +5,11 @@
         <title>Web Components</title>
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-        <!--<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>-->
+        <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+
+        <script type="text/javascript" src="node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+        <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js" defer=""></script>
+        
         <style>
             body{
               font-family: 'Montserrat', sans-serif;
@@ -31,14 +35,14 @@
             <cwc-select name="username" options='[{"label": "MALE", "value":"M"},{"label": "FEMALE", "value":"F"}]' ></cwc-select>
             <BR>
             <div><label>MULTI SELECT</label></div>
-            <cwc-select name="username" options='[{"label": "React Js", "value":"1"},{"label": "Angular", "value":"2"},{"label": "Vue", "value":"3"}]' multi ></cwc-select>
+            <cwc-select name="username" options='[{"label": "ReactJs", "value":"1"},{"label": "Angular", "value":"2"},{"label": "VueJs", "value":"3"}]' multi ></cwc-select>
         </form>
         <!--  -->
 
 
         <script src="components/cwc_input.js"></script>
         <script src="components/cwc_select.js"></script>
-        <!-- <script src="webcomponent.js"></script> -->
+
         <script>
             function renderNew() {
                 const data = [{label: 'SUPER COOL', value:'3'}]
